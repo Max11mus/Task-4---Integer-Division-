@@ -1,6 +1,7 @@
 package ua.com.foxminded.lms.integerdivision;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class IntegerDivision {
 
@@ -48,16 +49,25 @@ public class IntegerDivision {
 				String firstLineColumnDivision = "_" + dividendString + "|" + dividerString;
 				resultColumnDivision.set(0, firstLineColumnDivision);
 				
+				if (divider > dividend) {
+					resultColumnDivision.add(paddingLeftWithSpaceChar("0", dividendString.length() + 1));
+				}
 				String secondLineColumnDivision = resultColumnDivision.get(1);
 				secondLineColumnDivision = paddingRightWithSpaceChar(secondLineColumnDivision, dividendString.length() + 1);
 				secondLineColumnDivision += "|" + multipleHyphens(quotientString.length());
 				resultColumnDivision.set(1, secondLineColumnDivision);
 
+				if (divider > dividend) {
+					resultColumnDivision.add(paddingLeftWithSpaceChar(multipleHyphens(dividendString.length()), dividendString.length() + 1));
+				}
 				String thirdLineColumnDivision = resultColumnDivision.get(2);
 				thirdLineColumnDivision = paddingRightWithSpaceChar(resultColumnDivision.get(2), dividendString.length() + 1);
-				secondLineColumnDivision += "|" + quotientString;
+				thirdLineColumnDivision += "|" + quotientString;
 				resultColumnDivision.set(2, thirdLineColumnDivision);
 				
+				if (divider > dividend) {
+					resultColumnDivision.add(paddingLeftWithSpaceChar(remainderString, dividendString.length() + 1));
+				}
 				String lastLineColumnDivision = resultColumnDivision.get(resultColumnDivision.size() - 1);
 				String penultLineColumnDivision = resultColumnDivision.get(resultColumnDivision.size() - 2);
 				if (lastLineColumnDivision.length() > penultLineColumnDivision.length()) {
@@ -67,13 +77,11 @@ public class IntegerDivision {
 					resultColumnDivision.set(resultColumnDivision.size() - 1, lastLineColumnDivision);
 				}
 
-				for (int i = 0; i < resultColumnDivision.size(); i++) {
-					resultString = resultString + resultColumnDivision.get(i) + "\r\n";
-					
+				Iterator<String> iterator = resultColumnDivision.iterator();
+				while (iterator.hasNext()) {
+					resultString += iterator.next() + "\r\n";
+
 				}
-				
-				System.out.println(resultString);
-				
 				return resultString;
 			}
 		}
