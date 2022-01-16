@@ -42,7 +42,7 @@ class IntegerDivisionTest {
 						+ "     54\r\n";
 		String actual = integerDivision.calculateColumnDivisionTwoPositiveNumbers(666846,56);
 		
-		assertEquals(expected, actual, "Must return mustReturnSolution when dividend greater then divider.");
+		assertEquals(expected, actual, "Must return solution when dividend greater then divider.");
 	}
 	
 	
@@ -54,7 +54,7 @@ class IntegerDivisionTest {
 						+ " 56\r\n";
 		String actual = integerDivision.calculateColumnDivisionTwoPositiveNumbers(56,666846);
 		
-		assertEquals(expected, actual, "Must return mustReturnSolution when dividend less then divider.");
+		assertEquals(expected, actual, "Must return solution when dividend less then divider.");
 	}
 
 	@Test
@@ -65,7 +65,7 @@ class IntegerDivisionTest {
 						+ " 0\r\n";
 		String actual = integerDivision.calculateColumnDivisionTwoPositiveNumbers(0,999);
 		
-		assertEquals(expected, actual, "Must return mustReturnSolution when when dividend is zero.");
+		assertEquals(expected, actual, "Must return solution when when dividend is zero.");
 	}
 	
 	@Test
@@ -88,7 +88,7 @@ class IntegerDivisionTest {
 						+ "     0\r\n";
 		String actual = integerDivision.calculateColumnDivisionTwoPositiveNumbers(78654,1);
 		
-		assertEquals(expected, actual, "Must return mustReturnSolution when divider is one.");
+		assertEquals(expected, actual, "Must return solution when divider is one.");
 	}
 	
 	@Test
@@ -117,7 +117,24 @@ class IntegerDivisionTest {
 						+ "        2\r\n";
 		String actual = integerDivision.calculateColumnDivisionTwoPositiveNumbers(97654321,7);
 		
-		assertEquals(expected, actual, "Must return mustReturnSolution when divider is one.");
+		assertEquals(expected, actual, "Must return solution when divider is one digit.");
 	}
+
+	
+	@Test
+	void calculateColumnDivisionTwoPositiveNumbers_mustReturnSolution_whenQuotientHasTrailingZeroes() {
+		String expected = "_1111000001|11\r\n"
+						+ " 11        |---------\r\n"
+						+ " --        |101000000\r\n"
+						+ "  _11\r\n"
+						+ "   11\r\n"
+						+ "   --\r\n"
+						+ "    0000001\r\n";
+				
+		String actual = integerDivision.calculateColumnDivisionTwoPositiveNumbers(1111000001,11);
+
+		assertEquals(expected, actual, "Must return solution when quotient has trailing zeroes.");
+	}
+
 
 }

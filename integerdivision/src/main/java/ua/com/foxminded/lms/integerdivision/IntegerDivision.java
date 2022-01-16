@@ -72,7 +72,7 @@ public class IntegerDivision {
 				String penultLineColumnDivision = resultColumnDivision.get(resultColumnDivision.size() - 2);
 				if (lastLineColumnDivision.length() > penultLineColumnDivision.length()) {
 					lastLineColumnDivision = multipleZeroes(lastLineColumnDivision.length() - penultLineColumnDivision.length());
-					lastLineColumnDivision +=  quotientString;
+					lastLineColumnDivision +=  remainderString;
 					lastLineColumnDivision = paddingLeftWithSpaceChar(lastLineColumnDivision, dividendString.length() + 1);
 					resultColumnDivision.set(resultColumnDivision.size() - 1, lastLineColumnDivision);
 				}
