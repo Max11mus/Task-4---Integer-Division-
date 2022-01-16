@@ -28,7 +28,7 @@ class IntegerDivisionTest {
 	@Test
 	void calculateColumnDivisionTwoPositiveNumbers_mustReturnSolution_dividendGreaterThenDivider() {
 		String expected = "";
-		String actual = integerDivision.calculateColumnDivisionTwoPositiveNumbers(100,33);
+		String actual = integerDivision.calculateColumnDivisionTwoPositiveNumbers(565,1);
 
 		assertEquals(expected, actual, "Must return empty string when input empty string.");
 	}

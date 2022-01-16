@@ -11,64 +11,77 @@ public class IntegerDivision {
 			if ((dividend < 0) || (divider < 0)) {
 				throw new IllegalArgumentException("ERROR: Arguments are Negative.");
 			} else {
-				String dividendString = new String(String.valueOf(dividend));
-				String rightMargin = new String(String.valueOf(divider));
-				String quotient = new String(String.valueOf(dividend / divider));
-				int numberOfDigitsQuotient = quotient.length();
-				String remainder = new String(String.valueOf(dividend % divider));
+				String resultString = "";
 				ArrayList<String> resultColumnDivision = new ArrayList<String>();
+				String dividendString = intToString(dividend);
+				String dividerString = intToString(divider);
+				String quotientString = intToString(dividend / divider);
+				String remainderString = intToString(dividend % divider);
+				ArrayList<Integer> digitsOfQuotient = new ArrayList<Integer>();
+				ArrayList<Integer> producstOfDividerAndDigitOfQuotient = new ArrayList<Integer>();
 
-				int partOfDividend_Minuend = 0;
-				int difference = 0 ;
-				String differenceString = new String("0") ;
-				
-				for (int i = 0, leftMargin = 0, rightMargin = dividendString.length(); i < numberOfDigitsQuotient; i++) {
-					int currentDigitInQuotient = Character.digit(quotient.charAt(i), 10);
-					int productOfDividerAndCurentDigitInQuotient_Substrahend = divider * currentDigitInQuotient;
-					
-					rightMargin  =  leftMargin + getNumberOfDigitsPositiveInteger(productOfDividerAndCurentDigitInQuotient_Substrahend);
-
-					partOfDividend_Minuend = Integer.parseInt(dividendString.substring(leftMargin, rightMargin));
-					
-					if (currentDigitInQuotient != 0) {
-						
-						if (partOfDividend_Minuend < productOfDividerAndCurentDigitInQuotient_Substrahend) {
-							rightMargin++;
-							partOfDividend_Minuend = Integer.parseInt(dividendString.substring(leftMargin, rightMargin));
-						}
-						
-						difference = partOfDividend_Minuend - productOfDividerAndCurentDigitInQuotient_Substrahend;
-						differenceString = new String(String.valueOf(difference));
-						
-						resultColumnDivision.add(paddingLeftWithSpaceChar(partOfDividend_Minuend, ) );
-
-					} else {
-						leftMargin++;
-					}
-
+				for (int i = 0; i < quotientString.length(); i++) {
+					digitsOfQuotient.add(Character.digit(quotientString.charAt(i), 10));
 				}
 
-//				resultColumnDivision.add("_" + dividend + "|" + divider);				
+				for (int i = 0; i < digitsOfQuotient.size(); i++) {
+					producstOfDividerAndDigitOfQuotient.add(divider * digitsOfQuotient.get(i));
+				}
+
+				int remainder = dividend % divider;
+				int summ = 0;
+				resultColumnDivision.add(paddingLeftWithSpaceChar(remainderString, dividendString.length() + 1));
+				for (int i = digitsOfQuotient.size() - 1, rightMargin = dividendString.length() + 1; i >= 0; i--) {
+					int product = producstOfDividerAndDigitOfQuotient.get(i);
+					if (digitsOfQuotient.get(i) != 0) {
+						summ = product + remainder;
+						resultColumnDivision.add(0, paddingLeftWithSpaceChar(multipleHyphens(intToString(product).length()), rightMargin));
+						resultColumnDivision.add(0, paddingLeftWithSpaceChar(intToString(product), rightMargin));
+						resultColumnDivision.add(0, paddingLeftWithSpaceChar("_" + intToString(summ), rightMargin));
+						remainder = summ / 10;
+					} else {
+						remainder = remainder / 10;
+					}
+					rightMargin--;
+				}
 				
-				String expected = String.format("_123456789|1234%n" + " 1234     |------%n" + " ----     |100046%n"
-						+ "    _5678%n" + "     4936%n" + "     ----%n" + "     _7429%n" + "      7404%n"
-						+ "      ----%n" + "        25%n");
-				System.out.println(expected);
+				String firstLineColumnDivision = "_" + dividendString + "|" + dividerString;
+				resultColumnDivision.set(0, firstLineColumnDivision);
+				
+				String secondLineColumnDivision = resultColumnDivision.get(1);
+				secondLineColumnDivision = paddingRightWithSpaceChar(secondLineColumnDivision, dividendString.length() + 1);
+				secondLineColumnDivision += "|" + multipleHyphens(quotientString.length());
+				resultColumnDivision.set(1, secondLineColumnDivision);
 
-				System.out.println(resultColumnDivision.get(0));
+				String thirdLineColumnDivision = resultColumnDivision.get(2);
+				thirdLineColumnDivision = paddingRightWithSpaceChar(resultColumnDivision.get(2), dividendString.length() + 1);
+				secondLineColumnDivision += "|" + quotientString;
+				resultColumnDivision.set(2, thirdLineColumnDivision);
+				
+				String lastLineColumnDivision = resultColumnDivision.get(resultColumnDivision.size() - 1);
+				String penultLineColumnDivision = resultColumnDivision.get(resultColumnDivision.size() - 2);
+				if (lastLineColumnDivision.length() > penultLineColumnDivision.length()) {
+					lastLineColumnDivision = multipleZeroes(lastLineColumnDivision.length() - penultLineColumnDivision.length());
+					lastLineColumnDivision +=  quotientString;
+					lastLineColumnDivision = paddingLeftWithSpaceChar(lastLineColumnDivision, dividendString.length() + 1);
+					resultColumnDivision.set(resultColumnDivision.size() - 1, lastLineColumnDivision);
+				}
 
-				return resultColumnDivision.get(0);
-
+				for (int i = 0; i < resultColumnDivision.size(); i++) {
+					resultString = resultString + resultColumnDivision.get(i) + "\r\n";
+					
+				}
+				
+				System.out.println(resultString);
+				
+				return resultString;
 			}
 		}
+
 	}
 
-	private int getNumberOfDigitsPositiveInteger(int x) {
-		final int[] sizeTable = { 9, 99, 999, 9999, 99999, 999999, 9999999, 99999999, 999999999, Integer.MAX_VALUE };
-
-		for (int i = 0;; i++)
-			if (x <= sizeTable[i])
-				return i + 1;
+	private String intToString(int input) {
+		return new String(String.valueOf(input));
 	}
 
 	private String paddingLeftWithSpaceChar(String input, int length) {
@@ -77,6 +90,31 @@ public class IntegerDivision {
 		} else {
 			return String.format("%1$" + length + "s", input);
 		}
+	}
+
+	private String paddingRightWithSpaceChar(String input, int length) {
+		if ((length < 0) || (toString().length() < length)) {
+			return input;
+		} else {
+			return String.format("%1$-" + length + "s", input);
+		}
+	}
+
+	private String multipleHyphens(int length) {
+		if (length > 0) {
+			return String.format("%1$" + length + "s", "-").replace(" ", "-");
+		} else {
+			return new String("");
+		}
+	}
+
+	private String multipleZeroes(int length) {
+		if (length > 0) {
+			return String.format("%1$" + length + "s", "0").replace(" ", "0");
+		} else {
+			return new String("");
+		}
+
 	}
 
 }
