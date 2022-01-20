@@ -15,27 +15,21 @@ public class IntegerDivision {
 		String dividerString = Integer.toString(divider);
 		String quotientString = Integer.toString(dividend / divider);
 		String remainderString = Integer.toString(dividend % divider);
-		ArrayList<Integer> digitsOfQuotient = new ArrayList<Integer>();
-		ArrayList<Integer> producstOfDividerAndDigitOfQuotient = new ArrayList<Integer>();
+		ArrayList<Integer> digits = getDigitsOfQuotient(quotientString);
+		ArrayList<Integer> products = getProducstOfDividerAndDigitOfQuotient(digits, divider);
 
-		for (int i = 0; i < quotientString.length(); i++) {
-			digitsOfQuotient.add(Character.digit(quotientString.charAt(i), 10));
-		}
-
-		for (int i = 0; i < digitsOfQuotient.size(); i++) {
-			producstOfDividerAndDigitOfQuotient.add(divider * digitsOfQuotient.get(i));
-		}
-
+		
 		int remainder = dividend % divider;
 		int summ = 0;
-		resultColumnDivision.add(paddingLeftWithSpaceChar(remainderString, dividendString.length() + 1));
-		for (int i = digitsOfQuotient.size() - 1, rightMargin = dividendString.length() + 1; i >= 0; i--) {
-			int product = producstOfDividerAndDigitOfQuotient.get(i);
-			if (digitsOfQuotient.get(i) != 0) {
+		resultColumnDivision.add(alignLeftWithSpace(remainderString, dividendString.length() + 1));
+		for (int i = digits.size() - 1, rightMargin = dividendString.length() + 1; i >= 0; i--) {
+			int product = products.get(i);
+			if (digits.get(i) != 0) {
 				summ = product + remainder;
-				resultColumnDivision.add(0, paddingLeftWithSpaceChar(multipleHyphens(Integer.toString(product).length()), rightMargin));
-				resultColumnDivision.add(0, paddingLeftWithSpaceChar(Integer.toString(product), rightMargin));
-				resultColumnDivision.add(0, paddingLeftWithSpaceChar("_" + Integer.toString(summ), rightMargin));
+				resultColumnDivision.add(0, alignLeftWithSpace(multipleHyphens(Integer.toString(product).length()), 
+						rightMargin));
+				resultColumnDivision.add(0, alignLeftWithSpace(Integer.toString(product), rightMargin));
+				resultColumnDivision.add(0, alignLeftWithSpace("_" + Integer.toString(summ), rightMargin));
 				remainder = summ / 10;
 			} else {
 				remainder = remainder / 10;
@@ -47,30 +41,31 @@ public class IntegerDivision {
 		resultColumnDivision.set(0, firstLineColumnDivision);
 
 		if (divider > dividend) {
-			resultColumnDivision.add(paddingLeftWithSpaceChar("0", dividendString.length() + 1));
+			resultColumnDivision.add(alignLeftWithSpace("0", dividendString.length() + 1));
 		}
 		String secondLineColumnDivision = resultColumnDivision.get(1);
-		secondLineColumnDivision = paddingRightWithSpaceChar(secondLineColumnDivision, dividendString.length() + 1);
+		secondLineColumnDivision = alignRightWithSpaceChar(secondLineColumnDivision, dividendString.length() + 1);
 		secondLineColumnDivision += "|" + multipleHyphens(quotientString.length());
 		resultColumnDivision.set(1, secondLineColumnDivision);
 
 		if (divider > dividend) {
-			resultColumnDivision.add(paddingLeftWithSpaceChar(multipleHyphens(dividendString.length()), dividendString.length() + 1));
+			resultColumnDivision.add(alignLeftWithSpace(multipleHyphens(dividendString.length()), 
+					dividendString.length() + 1));
 		}
 		String thirdLineColumnDivision = resultColumnDivision.get(2);
-		thirdLineColumnDivision = paddingRightWithSpaceChar(resultColumnDivision.get(2), dividendString.length() + 1);
+		thirdLineColumnDivision = alignRightWithSpaceChar(resultColumnDivision.get(2), dividendString.length() + 1);
 		thirdLineColumnDivision += "|" + quotientString;
 		resultColumnDivision.set(2, thirdLineColumnDivision);
 
 		if (divider > dividend) {
-			resultColumnDivision.add(paddingLeftWithSpaceChar(remainderString, dividendString.length() + 1));
+			resultColumnDivision.add(alignLeftWithSpace(remainderString, dividendString.length() + 1));
 		}
 		String lastLineColumnDivision = resultColumnDivision.get(resultColumnDivision.size() - 1);
 		String penultLineColumnDivision = resultColumnDivision.get(resultColumnDivision.size() - 2);
 		if (lastLineColumnDivision.length() > penultLineColumnDivision.length()) {
 			lastLineColumnDivision = multipleZeroes(lastLineColumnDivision.length() - penultLineColumnDivision.length());
 			lastLineColumnDivision += remainderString;
-			lastLineColumnDivision = paddingLeftWithSpaceChar(lastLineColumnDivision, dividendString.length() + 1);
+			lastLineColumnDivision = alignLeftWithSpace(lastLineColumnDivision, dividendString.length() + 1);
 			resultColumnDivision.set(resultColumnDivision.size() - 1, lastLineColumnDivision);
 		}
 
@@ -96,7 +91,7 @@ public class IntegerDivision {
 		return resultString;
 	}
 
-	private String paddingLeftWithSpaceChar(String input, int length) {
+	private String alignLeftWithSpace(String input, int length) {
 		if ((length < 0) || (toString().length() < length)) {
 			return input;
 		} else {
@@ -104,7 +99,7 @@ public class IntegerDivision {
 		}
 	}
 
-	private String paddingRightWithSpaceChar(String input, int length) {
+	private String alignRightWithSpaceChar(String input, int length) {
 		if ((length < 0) || (toString().length() < length)) {
 			return input;
 		} else {
@@ -126,6 +121,23 @@ public class IntegerDivision {
 		} else {
 			return new String("");
 		}
+	}
+
+	private ArrayList<Integer> getDigitsOfQuotient(String quotientString) {
+		ArrayList<Integer> digits = new ArrayList<Integer>();
+
+		for (int i = 0; i < quotientString.length(); i++) {
+			digits.add(Character.digit(quotientString.charAt(i), 10));
+		}
+		return digits;
+	}
+
+	private ArrayList<Integer> getProducstOfDividerAndDigitOfQuotient(ArrayList<Integer> digits, int divider) {
+		ArrayList<Integer> producstOfDividerAndDigitOfQuotient = new ArrayList<Integer>();
+		for (int i = 0; i < digits.size(); i++) {
+			producstOfDividerAndDigitOfQuotient.add(divider * digits.get(i));
+		}
+		return producstOfDividerAndDigitOfQuotient;
 	}
 
 }
